@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Unsafeunsafe trait最常见的unsafe trait是Send&#x2F;Sync 12pub unsafe auto trait Send &amp;#123;&amp;#125;pub unsafe auto trait Sync &amp;#123;&amp;#125; 任何trait,只要声明称unsafe,它就是一个unsafe trait.一个正常的trait也可以包含unsafe 函数 123456">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unsafe">
+<meta property="og:url" content="https://chrisz2zz.github.io/rust/unsafe/index.html">
+<meta property="og:site_name" content="ChrisZzz&#96;s Blog">
+<meta property="og:description" content="Unsafeunsafe trait最常见的unsafe trait是Send&#x2F;Sync 12pub unsafe auto trait Send &amp;#123;&amp;#125;pub unsafe auto trait Sync &amp;#123;&amp;#125; 任何trait,只要声明称unsafe,它就是一个unsafe trait.一个正常的trait也可以包含unsafe 函数 123456">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-10-26T02:35:44.000Z">
+<meta property="article:modified_time" content="2023-11-10T09:00:25.241Z">
+<meta property="article:author" content="Chris">
+<meta property="article:tag" content="rust">
+<meta property="article:tag" content="unsafe">
+<meta name="twitter:card" content="summary">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Unsafe</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+
+    
+<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- rss -->
+    
+    
+    <!-- jquery -->
+    
+<script src="/lib/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+    <div class="banner">
+<div id="blogtitel" class="blogtitel">ChrisZzz`s Blog</div>
+<ul id="wrapper" class="wrapper">
+  <div class="sun">
+    <div class="star"></div>
+  </div>
+  <div class="mercury">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="venus">
+    <div class="planet">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="earth">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="mars">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+  <div class="jupiter">
+    <div class="planet"><div class="shadow"></div></div>
+  </div>
+</ul>
+</div>
+
+    <div class="background">
+      
+        <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="http://github.com/chrisz2zz">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/network/application-layer/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover='$("#i-next").toggle();' onmouseout='$("#i-next").toggle();'></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover='$("#i-top").toggle();' onmouseout='$("#i-top").toggle();'></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover='$("#i-share").toggle();' onmouseout='$("#i-share").toggle();' onclick='$("#share").toggle();return false;'></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://chrisz2zz.github.io/rust/unsafe/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://chrisz2zz.github.io/rust/unsafe/&text=Unsafe"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://chrisz2zz.github.io/rust/unsafe/&title=Unsafe"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://chrisz2zz.github.io/rust/unsafe/&is_video=false&description=Unsafe"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Unsafe&body=Check out this article: https://chrisz2zz.github.io/rust/unsafe/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://chrisz2zz.github.io/rust/unsafe/&title=Unsafe"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://chrisz2zz.github.io/rust/unsafe/&title=Unsafe"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://chrisz2zz.github.io/rust/unsafe/&title=Unsafe"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://chrisz2zz.github.io/rust/unsafe/&title=Unsafe"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://chrisz2zz.github.io/rust/unsafe/&name=Unsafe&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Unsafe"><span class="toc-number">1.</span> <span class="toc-text">Unsafe</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#unsafe-trait"><span class="toc-number">1.1.</span> <span class="toc-text">unsafe trait</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E5%B7%B2%E6%9C%89%E7%9A%84unsafe%E5%87%BD%E6%95%B0"><span class="toc-number">1.2.</span> <span class="toc-text">调用已有的unsafe函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E8%A3%B8%E6%8C%87%E9%92%88%E8%A7%A3%E5%BC%95%E7%94%A8"><span class="toc-number">1.3.</span> <span class="toc-text">对裸指针解引用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8FFI"><span class="toc-number">1.4.</span> <span class="toc-text">使用FFI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8unsafe%E7%9A%84%E5%9C%BA%E6%99%AF"><span class="toc-number">1.5.</span> <span class="toc-text">不推荐使用unsafe的场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E6%88%96%E8%80%85%E4%BF%AE%E6%94%B9%E5%8F%AF%E5%8F%98%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F"><span class="toc-number">1.5.1.</span> <span class="toc-text">访问或者修改可变静态变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E5%AE%8F%E9%87%8C%E4%BD%BF%E7%94%A8unsafe"><span class="toc-number">1.5.2.</span> <span class="toc-text">在宏里使用unsafe</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8unsafe%E6%8F%90%E5%8D%87%E6%80%A7%E8%83%BD"><span class="toc-number">1.5.3.</span> <span class="toc-text">使用unsafe提升性能</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+      
+      <div class="content index width mx-auto px2 my4">
+          
+          <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Unsafe
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">ChrisZzz`s Blog</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2023-10-26T02:35:44.000Z" itemprop="datePublished">2023-10-26</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/rust/" rel="tag">rust</a>, <a class="tag-link-link" href="/tags/unsafe/" rel="tag">unsafe</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="Unsafe"><a href="#Unsafe" class="headerlink" title="Unsafe"></a>Unsafe</h1><h2 id="unsafe-trait"><a href="#unsafe-trait" class="headerlink" title="unsafe trait"></a>unsafe trait</h2><p>最常见的unsafe trait是Send&#x2F;Sync</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">pub</span> <span class="keyword">unsafe</span> auto <span class="keyword">trait</span> <span class="title class_">Send</span> &#123;&#125;</span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">unsafe</span> auto <span class="keyword">trait</span> <span class="title class_">Sync</span> &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>任何trait,只要声明称unsafe,它就是一个unsafe trait</strong>.一个正常的trait也可以包含unsafe 函数</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 实现这个 trait 的开发者要保证实现是内存安全的</span></span><br><span class="line"><span class="keyword">unsafe</span> <span class="keyword">trait</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line">    <span class="keyword">fn</span> <span class="title function_">foo</span>(&amp;<span class="keyword">self</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">trait</span> <span class="title class_">Bar</span> &#123;</span><br><span class="line">    <span class="comment">// 调用这个函数的人要保证调用是安全的</span></span><br><span class="line">    <span class="keyword">unsafe</span> <span class="keyword">fn</span> <span class="title function_">bar</span>(&amp;<span class="keyword">self</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Nonsense</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">unsafe</span> <span class="keyword">impl</span> <span class="title class_">Foo</span> <span class="keyword">for</span> <span class="title class_">Nonsense</span> &#123;</span><br><span class="line">    <span class="keyword">fn</span> <span class="title function_">foo</span>(&amp;<span class="keyword">self</span>) &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;foo!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> <span class="title class_">Bar</span> <span class="keyword">for</span> <span class="title class_">Nonsense</span> &#123;</span><br><span class="line">    <span class="keyword">unsafe</span> <span class="keyword">fn</span> <span class="title function_">bar</span>(&amp;<span class="keyword">self</span>) &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;bar!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">nonsense</span> = Nonsense;</span><br><span class="line">    <span class="comment">// 调用者无需关心 safety</span></span><br><span class="line">    nonsense.<span class="title function_ invoke__">foo</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 调用者需要为 safety 负责</span></span><br><span class="line">    <span class="keyword">unsafe</span> &#123; nonsense.<span class="title function_ invoke__">bar</span>() &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>unsafe trait是对trait的实现者的约束</strong>,它告诉trait的实现者:实现我的时候要小心,要保证内存安全,所以实现的时候需要加unsafe关键字.</p>
+<p>但 unsafe trait 对于调用者来说，可以正常调用，不需要任何 unsafe block，因为这里的 safety 已经被实现者保证了，毕竟如果实现者没保证，调用者也做不了什么来保证 safety，就像我们使用 Send&#x2F;Sync 一样。</p>
+<p>而 unsafe fn 是函数对调用者的约束，它告诉函数的调用者：如果你胡乱使用我，会带来内存安全方面的问题，请妥善使用，所以调用 unsafe fn 时，需要加 unsafe block 提醒别人注意。</p>
+<h2 id="调用已有的unsafe函数"><a href="#调用已有的unsafe函数" class="headerlink" title="调用已有的unsafe函数"></a>调用已有的unsafe函数</h2><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> std::collections::HashMap;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">map</span> = HashMap::<span class="title function_ invoke__">new</span>();</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">map</span> = <span class="title function_ invoke__">explain</span>(<span class="string">&quot;empty&quot;</span>, map);</span><br><span class="line"></span><br><span class="line">    map.<span class="title function_ invoke__">insert</span>(<span class="type">String</span>::<span class="title function_ invoke__">from</span>(<span class="string">&quot;a&quot;</span>), <span class="number">1</span>);</span><br><span class="line">    <span class="title function_ invoke__">explain</span>(<span class="string">&quot;added 1&quot;</span>, map);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// HashMap 结构有两个 u64 的 RandomState，然后是四个 usize，</span></span><br><span class="line"><span class="comment">// 分别是 bucket_mask, ctrl, growth_left 和 items</span></span><br><span class="line"><span class="comment">// 我们 transmute 打印之后，再 transmute 回去</span></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">explain</span>&lt;K, V&gt;(name: &amp;<span class="type">str</span>, map: HashMap&lt;K, V&gt;) <span class="punctuation">-&gt;</span> HashMap&lt;K, V&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">arr</span>: [<span class="type">usize</span>; <span class="number">6</span>] = <span class="keyword">unsafe</span> &#123; std::mem::<span class="title function_ invoke__">transmute</span>(map) &#125;;</span><br><span class="line">    <span class="built_in">println!</span>(</span><br><span class="line">        <span class="string">&quot;&#123;&#125;: bucket_mask 0x&#123;:x&#125;, ctrl 0x&#123;:x&#125;, growth_left: &#123;&#125;, items: &#123;&#125;&quot;</span>,</span><br><span class="line">        name, arr[<span class="number">2</span>], arr[<span class="number">3</span>], arr[<span class="number">4</span>], arr[<span class="number">5</span>]</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 因为 std:mem::transmute 是一个 unsafe 函数，所以我们需要 unsafe</span></span><br><span class="line">    <span class="keyword">unsafe</span> &#123; std::mem::<span class="title function_ invoke__">transmute</span>(arr) &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="对裸指针解引用"><a href="#对裸指针解引用" class="headerlink" title="对裸指针解引用"></a>对裸指针解引用</h2><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">age</span> = <span class="number">18</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 不可变指针</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">r1</span> = &amp;age <span class="keyword">as</span> *<span class="keyword">const</span> <span class="type">i32</span>;</span><br><span class="line">    <span class="comment">// 可变指针</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">r2</span> = &amp;<span class="keyword">mut</span> age <span class="keyword">as</span> *<span class="keyword">mut</span> <span class="type">i32</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用裸指针，可以绕过 immutable / mutable borrow rule</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 然而，对指针解引用需要使用 unsafe</span></span><br><span class="line">    <span class="keyword">unsafe</span> &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;r1: &#123;&#125;, r2: &#123;&#125;&quot;</span>, *r1, *r2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">immutable_mutable_cant_coexist</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">age</span> = <span class="number">18</span>;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">r1</span> = &amp;age;</span><br><span class="line">    <span class="comment">// 编译错误</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">r2</span> = &amp;<span class="keyword">mut</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;r1: &#123;&#125;, r2: &#123;&#125;&quot;</span>, *r1, *r2);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用裸指针，可变指针和不可变指针可以共存，不像可变引用和不可变引用无法共存。这是因为裸指针的任何对内存的操作，无论是 ptr::read &#x2F; ptr::write，还是解引用，都是 unsafe 的操作，所以只要读写内存，裸指针的使用者就需要对内存安全负责。</p>
+<p>不可信的内存地址,使用unsafe:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="comment">// 裸指针指向一个有问题的地址</span></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">r1</span> = <span class="number">0xdeadbeef</span> <span class="keyword">as</span> *<span class="keyword">mut</span> <span class="type">u32</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;so far so good!&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">unsafe</span> &#123;</span><br><span class="line">        <span class="comment">// 程序崩溃</span></span><br><span class="line">        *r1 += <span class="number">1</span>;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;r1: &#123;&#125;&quot;</span>, *r1);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用FFI"><a href="#使用FFI" class="headerlink" title="使用FFI"></a>使用FFI</h2><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> std::mem::transmute;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">data</span> = <span class="keyword">unsafe</span> &#123;</span><br><span class="line">        <span class="keyword">let</span> <span class="variable">p</span> = libc::<span class="title function_ invoke__">malloc</span>(<span class="number">8</span>);</span><br><span class="line">        <span class="keyword">let</span> <span class="variable">arr</span>: &amp;<span class="keyword">mut</span> [<span class="type">u8</span>; <span class="number">8</span>] = <span class="title function_ invoke__">transmute</span>(p);</span><br><span class="line">        arr</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    data.<span class="title function_ invoke__">copy_from_slice</span>(&amp;[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>]);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;data: &#123;:?&#125;&quot;</span>, data);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">unsafe</span> &#123; libc::<span class="title function_ invoke__">free</span>(<span class="title function_ invoke__">transmute</span>(data)) &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="不推荐使用unsafe的场景"><a href="#不推荐使用unsafe的场景" class="headerlink" title="不推荐使用unsafe的场景"></a>不推荐使用unsafe的场景</h2><h3 id="访问或者修改可变静态变量"><a href="#访问或者修改可变静态变量" class="headerlink" title="访问或者修改可变静态变量"></a>访问或者修改可变静态变量</h3><figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> std::thread;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">mut</span> COUNTER: <span class="type">usize</span> = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">t1</span> = thread::<span class="title function_ invoke__">spawn</span>(<span class="keyword">move</span> || &#123;</span><br><span class="line">        <span class="keyword">unsafe</span> &#123; COUNTER += <span class="number">10</span> &#125;;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">t2</span> = thread::<span class="title function_ invoke__">spawn</span>(<span class="keyword">move</span> || &#123;</span><br><span class="line">        <span class="keyword">unsafe</span> &#123; COUNTER *= <span class="number">10</span> &#125;;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    t2.<span class="title function_ invoke__">join</span>().<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line">    t1.<span class="title function_ invoke__">join</span>().<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">unsafe</span> &#123; <span class="built_in">println!</span>(<span class="string">&quot;COUNTER: &#123;&#125;&quot;</span>, COUNTER) &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>应该改进为AtomicXXX&#x2F;或者Mutex&#x2F;RwLock:</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> std::&#123;</span><br><span class="line">    sync::atomic::&#123;AtomicUsize, Ordering&#125;,</span><br><span class="line">    thread,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> COUNTER: AtomicUsize = AtomicUsize::<span class="title function_ invoke__">new</span>(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">t1</span> = thread::<span class="title function_ invoke__">spawn</span>(<span class="keyword">move</span> || &#123;</span><br><span class="line">        COUNTER.<span class="title function_ invoke__">fetch_add</span>(<span class="number">10</span>, Ordering::SeqCst);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">t2</span> = thread::<span class="title function_ invoke__">spawn</span>(<span class="keyword">move</span> || &#123;</span><br><span class="line">        COUNTER</span><br><span class="line">            .<span class="title function_ invoke__">fetch_update</span>(Ordering::SeqCst, Ordering::SeqCst, |v| <span class="title function_ invoke__">Some</span>(v * <span class="number">10</span>))</span><br><span class="line">            .<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    t2.<span class="title function_ invoke__">join</span>().<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line">    t1.<span class="title function_ invoke__">join</span>().<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;COUNTER: &#123;&#125;&quot;</span>, COUNTER.<span class="title function_ invoke__">load</span>(Ordering::Relaxed));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="在宏里使用unsafe"><a href="#在宏里使用unsafe" class="headerlink" title="在宏里使用unsafe"></a>在宏里使用unsafe</h3><blockquote>
+<p>在宏中使用 unsafe，是非常危险的。<br>首先使用你的宏的开发者，可能压根不知道 unsafe 代码的存在；其次，含有 unsafe 代码的宏在被使用到的时候，相当于把 unsafe 代码注入到当前上下文中。在不知情的情况下，开发者到处调用这样的宏，会导致 unsafe 代码充斥在系统的各个角落，不好处理；最后，一旦 unsafe 代码出现问题，你可能都很难找到问题的根本原因。</p>
+</blockquote>
+<h3 id="使用unsafe提升性能"><a href="#使用unsafe提升性能" class="headerlink" title="使用unsafe提升性能"></a>使用unsafe提升性能</h3><blockquote>
+<p>性能，是一个系统级的问题。在你没有解决好架构、设计、算法、网络、存储等其他问题时，就来抠某个函数的实现细节的性能，我认为是不妥的，尤其是试图通过使用 unsafe 代码，跳过一些检查来提升性能。<br>要知道，好的算法和不好的算法可以有数量级上的性能差异。而有些时候，即便你能够使用 unsafe 让局部性能达到最优，但作为一个整体看的时候，这个局部的优化可能根本没有意义。</p>
+</blockquote>
+
+  </div>
+</article>
+
+
+
+      </div>
+      
+       <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="http://github.com/chrisz2zz">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Unsafe"><span class="toc-number">1.</span> <span class="toc-text">Unsafe</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#unsafe-trait"><span class="toc-number">1.1.</span> <span class="toc-text">unsafe trait</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E5%B7%B2%E6%9C%89%E7%9A%84unsafe%E5%87%BD%E6%95%B0"><span class="toc-number">1.2.</span> <span class="toc-text">调用已有的unsafe函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E8%A3%B8%E6%8C%87%E9%92%88%E8%A7%A3%E5%BC%95%E7%94%A8"><span class="toc-number">1.3.</span> <span class="toc-text">对裸指针解引用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8FFI"><span class="toc-number">1.4.</span> <span class="toc-text">使用FFI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8unsafe%E7%9A%84%E5%9C%BA%E6%99%AF"><span class="toc-number">1.5.</span> <span class="toc-text">不推荐使用unsafe的场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E6%88%96%E8%80%85%E4%BF%AE%E6%94%B9%E5%8F%AF%E5%8F%98%E9%9D%99%E6%80%81%E5%8F%98%E9%87%8F"><span class="toc-number">1.5.1.</span> <span class="toc-text">访问或者修改可变静态变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E5%AE%8F%E9%87%8C%E4%BD%BF%E7%94%A8unsafe"><span class="toc-number">1.5.2.</span> <span class="toc-text">在宏里使用unsafe</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8unsafe%E6%8F%90%E5%8D%87%E6%80%A7%E8%83%BD"><span class="toc-number">1.5.3.</span> <span class="toc-text">使用unsafe提升性能</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://chrisz2zz.github.io/rust/unsafe/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://chrisz2zz.github.io/rust/unsafe/&text=Unsafe"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://chrisz2zz.github.io/rust/unsafe/&title=Unsafe"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://chrisz2zz.github.io/rust/unsafe/&is_video=false&description=Unsafe"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Unsafe&body=Check out this article: https://chrisz2zz.github.io/rust/unsafe/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://chrisz2zz.github.io/rust/unsafe/&title=Unsafe"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://chrisz2zz.github.io/rust/unsafe/&title=Unsafe"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://chrisz2zz.github.io/rust/unsafe/&title=Unsafe"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://chrisz2zz.github.io/rust/unsafe/&title=Unsafe"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://chrisz2zz.github.io/rust/unsafe/&name=Unsafe&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick='$("#toc-footer").toggle();return false;'><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick='$("#share-footer").toggle();return false;'><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick='$("#nav-footer").toggle();return false;'><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+      
+      <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2023 Chris
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="http://github.com/chrisz2zz">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+      
+<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- Google Analytics -->
+
+<!-- Disqus Comments -->
+
+
+    </div>
+</body>
+</html>
